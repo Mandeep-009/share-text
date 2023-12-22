@@ -6,6 +6,7 @@ import {backendURL} from '../config'
 const Connected = () => {
     const {id} = useParams();
     const [content,setContent] = useState('');
+    axios.defaults.withCredentials = true;
     
     // commented this part because mongodb is able to delete documents after 15 minutes of their creation
 

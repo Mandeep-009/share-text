@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { backendURL } from '../config';
 
 const Send = () => {
-
+  axios.defaults.withCredentials = true;
   useEffect(()=>{
     async function createChannel () {
       const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';

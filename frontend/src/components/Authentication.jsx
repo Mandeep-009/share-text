@@ -4,6 +4,7 @@ import {backendURL} from '../config';
 
 const Authentication = () => {
   const [code,setCode] = useState('');
+  axios.defaults.withCredentials = true;
   async function checkCode () {
     const result = await axios.get(`${backendURL}/${code}`);
     if(result.data){
