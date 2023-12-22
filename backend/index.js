@@ -3,10 +3,15 @@ import cors from "cors";
 import mongoose from "mongoose";
 import { PORT, mongoDBURL } from "./config.js";
 import Connection from "./models/connection.js";
-import cron from "node-cron";
 
 const app = express();
-app.use(cors());
+app.use(cors(
+    {
+        origin: ["https://share-text-api.vercel.app"],
+        methods: ["POST" , "GET" , "PATCH" , "DELETE" ],
+        credentials: true
+    }
+));
 app.use(express.json());
 
 app.get('/',(req,res)=>{
@@ -64,14 +69,7 @@ app.delete('/connections/:id',async(req,res)=>{
 mongoose
     .connect(mongoDBURL)
     .then(()=>{
-        cron.schedule('0 2 * * *', async () => { 
-            try {
-              await Connection.deleteMany({}); 
-              console.log('Database cleared!');
-            } catch (err) {
-              console.error('Error clearing database:', err);
-            }
-          });
+        
         app.listen(PORT,()=>{
             console.log(`server is listening to port ${PORT}`);
         })

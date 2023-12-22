@@ -7,14 +7,16 @@ const Connected = () => {
     const {id} = useParams();
     const [content,setContent] = useState('');
     
-    setTimeout(() => {
-        async function timeout () {
-            await axios.delete(`${backendURL}/${id}`);
-            window.alert('Connection timed out ( 15minutes )');
-            window.location.href = '/';
-        }
-        timeout();
-    }, 900000);
+    // commented this part because mongodb is able to delete documents after 15 minutes of their creation
+
+    // setTimeout(() => {
+    //     async function timeout () {
+    //         await axios.delete(`${backendURL}/${id}`);
+    //         window.alert('Connection timed out ( 15minutes )');
+    //         window.location.href = '/';
+    //     }
+    //     timeout();
+    // }, 900000);
 
     const send = async ()=>{
         const response = await axios.patch(`${backendURL}/${id}`,{content});
