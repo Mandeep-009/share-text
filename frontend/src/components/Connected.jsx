@@ -6,12 +6,16 @@ const Connected = (props) => {
     const id = props.id;
     const text = props.text;
     const [content,setContent] = useState('');
+    const [alert,setAlert] = useState(false);
     axios.defaults.withCredentials = true;
     
     const send = async ()=>{
         const response = await axios.patch(`${backendURL}/${id}`,{content});
         if(response.data){
-            window.alert('sent successfully');
+            if(!alert){setAlert(true);
+            setTimeout(() => {
+                setAlert(false);
+            }, 1500);}
         }
         else{
             window.alert('Connection timed out ( 15minutes )');
@@ -31,7 +35,8 @@ const Connected = (props) => {
     }
 
   return (
-    <div>
+    <div style={{position:'relative'}}>
+        {alert?(<div style={{position:'absolute',color:'black',backgroundColor:'#e9e9ed',border:'none',borderRadius:'5px',padding:'5px',margin:'10px'}}>Sent successfully !!!</div>):(null)}
         <div style={{height:'20vh',display: 'flex',flexDirection: 'column',justifyContent:'center',alignItems:'center'}}>
             <div>Your code:</div>
             <div style={{margin: '10px 30px',border: '1px solid violet',padding:'5px',width: '100px'}}><output>{id}</output></div>
