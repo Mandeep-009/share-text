@@ -10,7 +10,7 @@ const Home = () => {
             </Link>
         </div>
         <div>
-            <Link to={'/authentication'}>
+            <Link to={'/receive'}>
                 <button>Receive text</button>
             </Link>
         </div>
