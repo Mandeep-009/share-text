@@ -6,13 +6,22 @@ const Authentication = ({authenticated}) => {
   const [code,setCode] = useState('');
   axios.defaults.withCredentials = true;
   async function checkCode () {
-    const result = await axios.get(`${backendURL}/${code}`);
-    if(result.data){
-      authenticated(result.data._id,result.data.content);
+    
+    try {
+      const result = await axios.get(`${backendURL}/${code}`);
+      if(result.data){
+        authenticated(result.data._id,result.data.content);
+      } else {
+        window.alert('No such channel found');
+      }
+    } catch (error) {
+      if (error.response && error.response.data) {
+        window.alert(error.response.data); 
+      } else {
+          console.error('An error occurred:', error);
+      }
     }
-    else{
-      window.alert('no such channel found');
-    }
+    
   }
   return (
     <div>

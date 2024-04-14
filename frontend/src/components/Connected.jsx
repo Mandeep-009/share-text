@@ -10,28 +10,48 @@ const Connected = (props) => {
     axios.defaults.withCredentials = true;
     
     const send = async ()=>{
-        const response = await axios.patch(`${backendURL}/${id}`,{content});
-        if(response.data){
-            if(!alert){setAlert(true);
-            setTimeout(() => {
-                setAlert(false);
-            }, 1500);}
-        }
-        else{
-            window.alert('Connection timed out ( 15minutes )');
-            window.location.href = '/';
-        }
+        try {
+            const response = await axios.patch(`${backendURL}/${id}`,{content});
+            if(response.data){
+                if(!alert){setAlert(true);
+                setTimeout(() => {
+                    setAlert(false);
+                }, 1500);}
+            } else{
+                window.alert('Connection timed out ( 15minutes )');
+                window.location.href = '/';
+            }
+          } catch (error) {
+            if (error.response && error.response.data) {
+                window.alert(error.response.data); 
+                window.location.href = '/';
+            } else {
+                console.error('An error occurred:', error);
+            }
+          }
     }
     const receive = async ()=>{
-        const response = await axios.get(`${backendURL}/${id}`);
-        if(response.data){
-            const txtspace = document.body.querySelector('textarea');
-            txtspace.value = response.data.content;
-        }
-        else{
-            window.alert('Connection timed out ( 15minutes )');
-            window.location.href = '/';
-        }
+        
+        
+        
+        try {
+            const response = await axios.get(`${backendURL}/${id}`);
+            if(response.data){
+                const txtspace = document.body.querySelector('textarea');
+                txtspace.value = response.data.content;
+            }
+            else{
+                window.alert('Connection timed out ( 15minutes )');
+                window.location.href = '/';
+            }
+          } catch (error) {
+            if (error.response && error.response.data) {
+                window.alert('Connection timed out ( 15minutes )'); 
+                window.location.href = '/';
+            } else {
+                console.error('An error occurred:', error);
+            }
+          }
     }
 
   return (

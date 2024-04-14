@@ -7,7 +7,7 @@ import Connection from "./models/connection.js";
 const app = express();
 app.use(cors(
     {
-        origin: ["https://text-share-app.vercel.app","http://localhost:3000"],
+        origin: ["https://text-share-app.vercel.app"],
         methods: ["POST" , "GET" , "PATCH" , "DELETE" ],
         credentials: true
     }
@@ -34,9 +34,9 @@ app.get('/connections/:id',async(req,res)=>{
         if(connection){
             return res.status(200).send(connection);
         }
-        return res.status(404).send(false);
+        return res.status(404).send('No such channel exists');
     } catch (error) {
-        return res.status(500).send(error.message);
+        return res.status(500).send(error);
     }
 })
 
@@ -67,7 +67,7 @@ app.patch('/connections/:id',async(req,res)=>{
         if(result) {
             return res.status(200).send('updated successfully');
         }
-        return res.status(404).send(false);
+        return res.status(404).send('This connection token has expired');
     } catch (error) {
         return res.status(500).send(error);
     }
