@@ -7,7 +7,7 @@ import Connection from "./models/connection.js";
 const app = express();
 app.use(cors(
     {
-        origin: ["https://text-share-app.vercel.app"],
+        origin: ["https://text-share-app.vercel.app","http://localhost:3000"],
         methods: ["POST" , "GET" , "PATCH" , "DELETE" ],
         credentials: true
     }
@@ -15,55 +15,75 @@ app.use(cors(
 app.use(express.json());
 
 app.get('/',(req,res)=>{
-    res.send('hello guys ...');
+    return res.status(200).send('hello guys ...');
 })
 
 app.get('/connections',async(req,res)=>{
-    const connections = await Connection.find({});
-    res.send(connections);
+    try {
+        const connections = await Connection.find({});
+        return res.status(200).send(connections);
+    } catch (error) {
+        return res.status(500).send(error);
+    }
 })
 
 app.get('/connections/:id',async(req,res)=>{
-    const {id} = req.params;
-    const connection = await Connection.findById(id);
-    if(connection){
-        return res.send(connection);
+    try {
+        const {id} = req.params;
+        const connection = await Connection.findById(id);
+        if(connection){
+            return res.status(200).send(connection);
+        }
+        return res.status(404).send(false);
+    } catch (error) {
+        return res.status(500).send(error.message);
     }
-    return res.send(false);
 })
 
 app.post('/connections',async(req,res)=>{
-    if(req.body.id===''){
-        return res.send('enter the id');
+    try {
+        if(req.body.id===''){
+            return res.status(400).send('enter the id');
+        }
+        const connection = {
+            _id: req.body.id,
+            content: req.body.content
+        }
+        const result = await Connection.create(connection);
+        if(result){
+            return res.status(201).send('posted successfully');
+        }
+        return res.status(500).send('some error occured while making post request');
+    } catch (error) {
+        return res.status(500).send(error);
     }
-    const connection = {
-        _id: req.body.id,
-        content: req.body.content
-    }
-    const result = await Connection.create(connection);
-    if(result){
-        return res.send('posted successfully');
-    }
-    return res.send('some error occured');
 });
 
 app.patch('/connections/:id',async(req,res)=>{
-    const {id} = req.params;
-    const content = req.body.content;
-    const result = await Connection.findByIdAndUpdate(id,{content});
-    if(result) {
-        return res.send('updated successfully');
+    try {
+        const {id} = req.params;
+        const content = req.body.content;
+        const result = await Connection.findByIdAndUpdate(id,{content});
+        if(result) {
+            return res.status(200).send('updated successfully');
+        }
+        return res.status(404).send(false);
+    } catch (error) {
+        return res.status(500).send(error);
     }
-    res.send(false);
 });
 
 app.delete('/connections/:id',async(req,res)=>{
-    const {id} = req.params;
-    const result = await Connection.findByIdAndDelete(id);
-    if(result){
-        return res.send('deleted successfully');
+    try {
+        const {id} = req.params;
+        const result = await Connection.findByIdAndDelete(id);
+        if(result){
+            return res.status(200).send('deleted successfully');
+        }
+        return res.status(404).send('no such connection found');
+    } catch (error) {
+        return res.status(500).send(error);
     }
-    return res.send('no such connection found');
 })
 
 mongoose
