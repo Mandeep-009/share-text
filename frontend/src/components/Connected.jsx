@@ -31,9 +31,6 @@ const Connected = (props) => {
           }
     }
     const receive = async ()=>{
-        
-        
-        
         try {
             const response = await axios.get(`${backendURL}/${id}`);
             if(response.data){
