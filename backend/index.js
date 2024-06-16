@@ -89,7 +89,7 @@ app.delete('/connections/:id',async(req,res)=>{
 mongoose
     .connect(mongoDBURL)
     .then(()=>{
-        
+        console.log('server connected to database');
         app.listen(PORT,()=>{
             console.log(`server is listening to port ${PORT}`);
         })
