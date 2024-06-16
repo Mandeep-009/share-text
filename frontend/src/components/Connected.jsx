@@ -51,6 +51,21 @@ const Connected = (props) => {
           }
     }
 
+    const copyFn = (e) => {
+        console.log(content);
+        navigator.clipboard.writeText(content)
+            .then(function() {
+                e.target.innerHTML = 'copied!!! '
+            })
+            .catch((err) => {
+                console.error('Could not copy text: ', err);
+            });
+        
+        setTimeout(()=>{
+            e.target.innerHTML = 'copy to clipboard'
+        },1000)
+    }
+
   return (
     <div style={{position:'relative'}}>
         {alert?(<div style={{position:'absolute',color:'black',backgroundColor:'#e9e9ed',border:'none',borderRadius:'5px',padding:'5px',margin:'10px'}}>Sent successfully !!!</div>):(null)}
@@ -59,7 +74,10 @@ const Connected = (props) => {
             <div style={{margin: '10px 30px',border: '1px solid violet',padding:'5px',width: '100px'}}><output>{id}</output></div>
         </div>
         <div>
-            <textarea onChange={(e)=>setContent(e.target.value)} defaultValue={text} style={{height:'50vh',width:'70vw',backgroundColor:'#222221',color:'white',fontSize:'14px'}}></textarea>
+            <div style={{position:'relative', display:'flex', justifyContent:'center', alignItems:'center'}}>
+                <div style={{height:'50vh',width:'70vw'}}><textarea onChange={(e)=>setContent(e.target.value)} defaultValue={text} style={{height:'50vh',width:'70vw', backgroundColor:'#222221',color:'white',fontSize:'14px'}}></textarea></div>
+                <div style={{position:'absolute', bottom:'0px', right:'15vw'}}><button style={{width:'100px'}} onClick={(e)=>copyFn(e)}>copy to clipboard</button></div>
+            </div>
             <div style={{margin:'10px'}}>
                 <button onClick={send}>Send</button>
                 <button onClick={receive}>Receive</button>

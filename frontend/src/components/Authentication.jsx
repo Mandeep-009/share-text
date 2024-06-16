@@ -27,7 +27,7 @@ const Authentication = ({authenticated}) => {
     <div>
       <div style={{fontSize:'18px',margin:'50px 0 0 0',justifyContent:'center'}}>Enter connection code:</div>
       <div>
-        <input type="text" onChange={(e)=>setCode(e.target.value)} style={{height:'30px',width:'200px',fontSize:'18px',margin:'10px 0 30px 0',backgroundColor:'#222221',color:'white'}}/>
+        <input type="text" onChange={(e)=>setCode(e.target.value)} style={{height:'30px',width:'200px',fontSize:'18px',margin:'10px 0 30px 0',backgroundColor:'#222221',color:'white', border:'1px solid white'}}/>
       </div>
       <button onClick={checkCode}>Connect</button>
     </div>
