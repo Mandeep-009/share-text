@@ -5,7 +5,7 @@ import {backendURL} from '../config'
 const Connected = (props) => {
     const id = props.id;
     const text = props.text;
-    const [content,setContent] = useState('');
+    const [content,setContent] = useState(text);
     const [alert,setAlert] = useState(false);
     axios.defaults.withCredentials = true;
     
