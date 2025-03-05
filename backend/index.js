@@ -7,7 +7,7 @@ import Connection from "./models/connection.js";
 const app = express();
 app.use(cors(
     {
-        origin: ["https://text-share-app.vercel.app"],
+        origin: ["https://text-share-app.vercel.app","https://text.mandeep.space"],
         methods: ["POST" , "GET" , "PATCH" , "DELETE" ],
         credentials: true
     }
