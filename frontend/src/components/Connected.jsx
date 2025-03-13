@@ -18,7 +18,8 @@ const Connected = (props) => {
                     setAlert(false);
                 }, 1500);}
             } else{
-                window.alert('Connection timed out ( 15minutes )');
+                navigator.clipboard.writeText(content)
+                window.alert('Connection timed out ( 15minutes ) and current content in the textarea is copied to clipboard.');
                 window.location.href = '/';
             }
           } catch (error) {
