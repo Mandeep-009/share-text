@@ -19,7 +19,7 @@ const Connected = (props) => {
                 }, 1500);}
             } else{
                 navigator.clipboard.writeText(content)
-                window.alert('Connection timed out ( 15minutes ) and current content in the textarea is copied to clipboard.');
+                window.alert('Connection timed out ( 5minutes ) and current content in the textarea is copied to clipboard.');
                 window.location.href = '/';
             }
           } catch (error) {
