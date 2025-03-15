@@ -11,7 +11,7 @@ const Send = () => {
     async function createChannel () {
       const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
       let randomString = '';
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < 4; i++) {
         const randomIndex = Math.floor(Math.random() * 36);
         randomString += characters[randomIndex];
       }
@@ -21,6 +21,7 @@ const Send = () => {
         setLoading(false);
       } catch (error) {
         console.error('error creating channel: ',error);
+        window.alert('error creating channel. please refresh the page');
       }
 
     }

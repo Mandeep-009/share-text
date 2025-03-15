@@ -39,12 +39,12 @@ const Connected = (props) => {
                 txtspace.value = response.data.content;
             }
             else{
-                window.alert('Connection timed out ( 15minutes )');
+                window.alert('Connection timed out ( 5 minutes )');
                 window.location.href = '/';
             }
           } catch (error) {
             if (error.response && error.response.data) {
-                window.alert('Connection timed out ( 15minutes )'); 
+                window.alert('Connection timed out ( 5 minutes )'); 
                 window.location.href = '/';
             } else {
                 console.error('An error occurred:', error);
