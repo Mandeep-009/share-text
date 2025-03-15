@@ -1,6 +1,5 @@
 import express from "express";
 import cors from "cors";
-import mongoose from "mongoose";
 import { PORT, mongoDBURL } from "./config.js";
 import Connection from "./models/connection.js";
 
@@ -14,13 +13,15 @@ app.use(cors(
 ));
 app.use(express.json());
 
+let connections = [];
+
 app.get('/',(req,res)=>{
     return res.status(200).send('hello guys ...');
 })
 
 app.get('/connections',async(req,res)=>{
     try {
-        const connections = await Connection.find({});
+        // const connections = await Connection.find({});
         return res.status(200).send(connections);
     } catch (error) {
         return res.status(500).send(error);
@@ -30,10 +31,16 @@ app.get('/connections',async(req,res)=>{
 app.get('/connections/:id',async(req,res)=>{
     try {
         const {id} = req.params;
-        const connection = await Connection.findById(id);
-        if(connection){
-            return res.status(200).send(connection);
+        // const connection = await Connection.findById(id);
+        // if(connection){
+        //     return res.status(200).send(connection);
+        // }
+
+        const existingConnection = connections.find((connection)=>connection.id===id);
+        if(existingConnection && new Date() < existingConnection.expiresAt){
+            return res.status(200).send(existingConnection);
         }
+
         return res.status(404).send('No such channel exists');
     } catch (error) {
         return res.status(500).send(error);
@@ -45,15 +52,25 @@ app.post('/connections',async(req,res)=>{
         if(req.body.id===''){
             return res.status(400).send('enter the id');
         }
-        const connection = {
-            _id: req.body.id,
-            content: req.body.content
+
+        const newConnection = {createdAt: new Date(), expiresAt: new Date(Date.now() + 5*60000), id: req.body.id, content: req.body.content};
+        //find if some connection with same id exists
+        let existingConnection = connections.find((connection)=>connection.id===req.body.id);
+        if(existingConnection){
+            //check if current time is more than expiry time
+            if(new Date() >= existingConnection.expiresAt){
+                //update existing connection by the new connection
+                existingConnection.createdAt = newConnection.createdAt;
+                existingConnection.expiresAt = newConnection.expiresAt;
+                existingConnection.content = newConnection.content;
+                return res.status(201).send('posted successfully');
+            } else{
+                return res.status(400).send('connection with this id already exists');
+            }
         }
-        const result = await Connection.create(connection);
-        if(result){
-            return res.status(201).send('posted successfully');
-        }
-        return res.status(500).send('some error occured while making post request');
+        
+        connections.push(newConnection);
+        return res.status(201).send('posted successfully');
     } catch (error) {
         return res.status(500).send(error);
     }
@@ -63,8 +80,11 @@ app.patch('/connections/:id',async(req,res)=>{
     try {
         const {id} = req.params;
         const content = req.body.content;
-        const result = await Connection.findByIdAndUpdate(id,{content});
-        if(result) {
+        // const result = await Connection.findByIdAndUpdate(id,{content});
+
+        const existingConnection = connections.find((connection)=>connection.id===id);
+        if(existingConnection && new Date() < existingConnection.expiresAt){
+            existingConnection.content = content;
             return res.status(200).send('updated successfully');
         }
         return res.status(404).send('This connection token has expired');
@@ -73,25 +93,19 @@ app.patch('/connections/:id',async(req,res)=>{
     }
 });
 
-app.delete('/connections/:id',async(req,res)=>{
-    try {
-        const {id} = req.params;
-        const result = await Connection.findByIdAndDelete(id);
-        if(result){
-            return res.status(200).send('deleted successfully');
-        }
-        return res.status(404).send('no such connection found');
-    } catch (error) {
-        return res.status(500).send(error);
-    }
+// app.delete('/connections/:id',async(req,res)=>{
+//     try {
+//         const {id} = req.params;
+//         const result = await Connection.findByIdAndDelete(id);
+//         if(result){
+//             return res.status(200).send('deleted successfully');
+//         }
+//         return res.status(404).send('no such connection found');
+//     } catch (error) {
+//         return res.status(500).send(error);
+//     }
+// })
+
+app.listen(PORT,()=>{
+    console.log(`server is listening to port ${PORT}`);
 })
-
-mongoose
-    .connect(mongoDBURL)
-    .then(()=>{
-        console.log('server connected to database');
-        app.listen(PORT,()=>{
-            console.log(`server is listening to port ${PORT}`);
-        })
-    })
-
