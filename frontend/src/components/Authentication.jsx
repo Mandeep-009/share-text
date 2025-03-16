@@ -10,7 +10,7 @@ const Authentication = ({authenticated}) => {
     try {
       const result = await axios.get(`${backendURL}/${code}`);
       if(result.data){
-        authenticated(result.data._id,result.data.content);
+        authenticated(result.data.id,result.data.content);
       } else {
         window.alert('No such channel found');
       }
