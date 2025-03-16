@@ -1,7 +1,6 @@
 import express from "express";
 import cors from "cors";
-import { PORT, mongoDBURL } from "./config.js";
-import Connection from "./models/connection.js";
+import { PORT} from "./config.js";
 
 const app = express();
 app.use(cors(
